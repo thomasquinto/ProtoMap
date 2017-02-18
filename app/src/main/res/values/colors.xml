@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="translucent">#00000000</color>
+
+    <!-- BEGIN from NEW Style Guide -->
+    <!-- http://wiki.dev.life360.com/display/PROD/Color -->
+
+    <!-- Grape -->
+    <color name="primary_text_grape_600">#6D3DF2</color>
+    <color name="primary_main_grape_500">#7C4DFF</color>
+    <color name="primary_grape_100">#E5DBFF</color>
+
+    <!-- Neutral -->
+    <color name="neutral_900">#323638</color>
+    <color name="neutral_600">#6C7378</color>
+    <color name="neutral_400">#C3C9CE</color>
+    <color name="neutral_300">#DEE1E4</color>
+    <color name="neutral_200">#EFF0F1</color>
+    <color name="neutral_100">#F5F6F7</color>
+    <color name="neutral_000">#FFFFFF</color>
+    <color name="neutral_900_a0x91">#91323638</color>
+
+    <!-- Kiwi -->
+    <color name="text_kiwi_600">#0ECC5D</color>
+    <color name="main_kiwi_500">#10D65F</color>
+    <color name="kiwi_100">#D3F7E2</color>
+
+    <!-- Blueberry -->
+    <color name="text_blueberry_600">#3D85F2</color>
+    <color name="main_blueberry_500">#4D94FF</color>
+    <color name="blueberry_100">#DBEAFF</color>
+
+    <!-- Watermelon -->
+    <color name="text_watermelon_600">#E84D8B</color>
+    <color name="main_watermelon_500">#F55695</color>
+    <color name="watermelon_100">#FDDDEA</color>
+
+    <!-- Mango -->
+    <color name="text_mango_600">#F7A223</color>
+    <color name="main_mango_500">#FFAE36</color>
+    <color name="mango_100">#FFEFD7</color>
+
+    <!-- Kale -->
+    <color name="text_kale_600">#1ABBC7</color>
+    <color name="main_kale_500">#2EC6D1</color>
+    <color name="kale_100">#D5F4F6</color>
+
+    <!-- Fig -->
+    <color name="text_fig_600">#C849D1</color>
+    <color name="main_fig_500">#D559DE</color>
+    <color name="fig_100">#F7DEF8</color>
+
+    <!-- Pumpkin -->
+    <color name="text_pumpkin_600">#F25A49</color>
+    <color name="main_pumpkin_500">#FF6A59</color>
+    <color name="pumpkin_100">#FFE1DE</color>
+
+    <!-- END from NEW Style Guide -->
+</resources>

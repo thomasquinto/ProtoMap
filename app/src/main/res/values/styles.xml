@@ -1,0 +1,11 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/main_blueberry_500</item>
+        <item name="colorPrimaryDark">@color/primary_main_grape_500</item>
+        <item name="colorAccent">@color/main_watermelon_500</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+</resources>

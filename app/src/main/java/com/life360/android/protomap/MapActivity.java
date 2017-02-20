@@ -1,12 +1,15 @@
 package com.life360.android.protomap;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
+import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -18,6 +21,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mikepenz.iconics.context.IconicsContextWrapper;
+import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -38,8 +43,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     private static final int STATUS_BAR_HEIGHT_DP = 24;
     private static final int NAV_BAR_HEIGHT_DP = 48;
-    private static final int SLIDE_PANEL_RESTING_HEIGHT_DP = NAV_BAR_HEIGHT_DP + NAV_BAR_HEIGHT_DP + STATUS_BAR_HEIGHT_DP;
-    private static final float SLIDE_PANEL_ANCHOR_POINT_PERCENTAGE = 0.25f;
+    private static final int SLIDE_PANEL_RESTING_HEIGHT_DP = NAV_BAR_HEIGHT_DP * 2;
+    private static final float SLIDE_PANEL_ANCHOR_POINT_RATIO = 0.25f;
     private static final int SLIDE_PANEL_PARALLAX_OFFSET_PX = 500;
     private static final int STATUS_BAR_COLOR = R.color.primary_main_grape_500;
 
@@ -60,15 +65,22 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         setContentView(R.layout.map_activity);
         ButterKnife.bind(this);
 
+        LayoutInflaterCompat.setFactory(getLayoutInflater(), new IconicsLayoutInflater(AppCompatDelegate.create(this, null)));
+
         setupMapFragment();
         setupSlidePanel();
         setupTabs();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            setBackgroundColor(statusBar, getStatusBarColor(SLIDE_PANEL_ANCHOR_POINT_PERCENTAGE));
-            setBackgroundColor(navBar, getStatusBarColor(SLIDE_PANEL_ANCHOR_POINT_PERCENTAGE));
+            setBackgroundColor(statusBar, getStatusBarColor(SLIDE_PANEL_ANCHOR_POINT_RATIO));
+            setBackgroundColor(navBar, getStatusBarColor(SLIDE_PANEL_ANCHOR_POINT_RATIO));
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
     }
 
     private void setupMapFragment() {
@@ -112,7 +124,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     private void setupSlidePanel() {
         slidePanel.setPanelHeight(dpToPixels(SLIDE_PANEL_RESTING_HEIGHT_DP));
-        slidePanel.setAnchorPoint(SLIDE_PANEL_ANCHOR_POINT_PERCENTAGE);
+        slidePanel.setAnchorPoint(SLIDE_PANEL_ANCHOR_POINT_RATIO);
         slidePanel.setParallaxOffset(SLIDE_PANEL_PARALLAX_OFFSET_PX);
         //slidePanel.setOverlayed(true);
         slidePanel.setCoveredFadeColor(android.R.color.transparent); // disable scroll fading
@@ -121,7 +133,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         slidePanel.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                if (slideOffset <= SLIDE_PANEL_ANCHOR_POINT_PERCENTAGE) {
+                if (slideOffset <= SLIDE_PANEL_ANCHOR_POINT_RATIO) {
                     int paddingBottom = (int) (slideOffset * mapHeight);
                     map.setPadding(0, 0, 0, paddingBottom);
                 } else {
@@ -145,7 +157,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private Integer getStatusBarColor(float offset) {
         if (offset >= 0 && offset <= 1) {
             int color = ContextCompat.getColor(MapActivity.this, STATUS_BAR_COLOR);
-            float min = SLIDE_PANEL_ANCHOR_POINT_PERCENTAGE * 255f;
+            float min = SLIDE_PANEL_ANCHOR_POINT_RATIO * 255f;
             float max = 255f;
             int alpha = (int) (min + offset * (max - min));
             color = ColorUtils.setAlphaComponent(color, alpha);
@@ -179,10 +191,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             }
         });
 
-        int i = 0;
-        for (int resId : TabPagerAdapter.imageResId) {
-            tabLayout.getTabAt(i++).setIcon(resId);
-        }
+        tabLayout.setTabTextColors(
+                ContextCompat.getColor(this, R.color.neutral_600),
+                ContextCompat.getColor(this, R.color.primary_main_grape_500)
+        );
+
     }
 
     private void resetSlidePanelToAnchorPosition() {

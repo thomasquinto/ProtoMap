@@ -40,4 +40,8 @@ dependencies {
     }
     compile 'com.sothree.slidinguppanel:library:3.3.1'
 
+    // Android-Iconics
+    compile "com.mikepenz:iconics-core:2.8.2@aar"
+    compile 'com.mikepenz:google-material-typeface:2.2.0.3.original@aar'
+
 }

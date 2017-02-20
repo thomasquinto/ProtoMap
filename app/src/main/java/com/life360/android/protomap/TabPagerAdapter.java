@@ -10,6 +10,9 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+
 /**
  * Created by thomas on 2/19/17.
  */
@@ -33,20 +36,24 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
         return TabPageFragment.newInstance(position + 1);
     }
 
-    public static int[] imageResId = {
-            R.drawable.img_icon_settings,
-            R.drawable.places_mapicon_home,
-            R.drawable.places_mapicon_work,
-            R.drawable.places_mapicon_park,
+    public static GoogleMaterial.Icon[] tabIcons = {
+            GoogleMaterial.Icon.gmd_account_circle,
+            GoogleMaterial.Icon.gmd_place,
+            GoogleMaterial.Icon.gmd_warning,
+            GoogleMaterial.Icon.gmd_settings
     };
 
     @Override
     public CharSequence getPageTitle(int position) {
-        // Generate title based on item position
-        Drawable image = ContextCompat.getDrawable(context, imageResId[position]);
+
+        Drawable image = new IconicsDrawable(context)
+                .icon(tabIcons[position])
+                .color(ContextCompat.getColor(context, R.color.primary_main_grape_500))
+                .sizeDp(24);
+
         image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
         // Replace blank spaces with image icon
-        SpannableString sb = new SpannableString("   " + tabTitles[position] + "2");
+        SpannableString sb = new SpannableString(" \n" + tabTitles[position] );
         ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
         sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sb;

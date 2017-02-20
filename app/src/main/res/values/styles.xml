@@ -5,8 +5,16 @@
         <item name="colorPrimary">@color/main_blueberry_500</item>
         <item name="colorPrimaryDark">@color/primary_main_grape_500</item>
         <item name="colorAccent">@color/main_watermelon_500</item>
+
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:navigationBarColor">@color/primary_main_grape_500</item>
+        <item name="android:statusBarColor">@color/primary_main_grape_500</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="textAllCaps">false</item>
+    </style>
 </resources>

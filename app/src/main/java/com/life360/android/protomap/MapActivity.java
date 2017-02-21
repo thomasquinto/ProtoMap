@@ -1,6 +1,5 @@
 package com.life360.android.protomap;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -21,7 +20,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.mikepenz.iconics.context.IconicsContextWrapper;
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -36,8 +34,8 @@ import static com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.HIDDEN;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private static final LatLng MAP_INIT_LOCATION = new LatLng(59.145833, 10.223611);
-    private static final int MAP_INIT_ZOOM_LEVEL = 10;
+    public static final LatLng MAP_INIT_LOCATION = new LatLng(59.145833, 10.223611);
+    public static final int MAP_INIT_ZOOM_LEVEL = 10;
     private GoogleMap map;
     private int mapHeight;
 
@@ -59,6 +57,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     @BindView(R.id.fake_nav_bar)
     View navBar;
 
+    private SlidingUpPanelLayout.PanelState slidePanelPreviousState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,17 +70,15 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         setupMapFragment();
         setupSlidePanel();
         setupTabs();
+        setupWindowLayout();
+    }
 
+    private void setupWindowLayout() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             setBackgroundColor(statusBar, getStatusBarColor(SLIDE_PANEL_ANCHOR_POINT_RATIO));
             setBackgroundColor(navBar, getStatusBarColor(SLIDE_PANEL_ANCHOR_POINT_RATIO));
         }
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
     }
 
     private void setupMapFragment() {
@@ -113,13 +111,16 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             @Override
             public void onMapClick(LatLng latLng) {
                 if (toggle.get()) {
+                    slidePanelPreviousState = slidePanel.getPanelState();
                     slidePanel.setPanelState(HIDDEN);
                 } else {
-                    slidePanel.setPanelState(COLLAPSED);
+                    slidePanel.setPanelState(slidePanelPreviousState);
                 }
                 toggle.set(!toggle.get());
             }
         });
+
+        map.setPadding(0, dpToPixels(STATUS_BAR_HEIGHT_DP), 0, 0);
     }
 
     private void setupSlidePanel() {
@@ -135,7 +136,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             public void onPanelSlide(View panel, float slideOffset) {
                 if (slideOffset <= SLIDE_PANEL_ANCHOR_POINT_RATIO) {
                     int paddingBottom = (int) (slideOffset * mapHeight);
-                    map.setPadding(0, 0, 0, paddingBottom);
+                    int paddingTop = dpToPixels(STATUS_BAR_HEIGHT_DP) + (int) (paddingBottom * .45f);
+                    map.setPadding(0, paddingTop, 0, paddingBottom);
                 } else {
                     setBackgroundColor(statusBar, getStatusBarColor(slideOffset));
                     setBackgroundColor(navBar, getStatusBarColor(slideOffset));
@@ -178,11 +180,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 resetSlidePanelToAnchorPosition();
+                tabLayout.getTabAt(tab.getPosition()).setText(TabPagerAdapter.getTabText(MapActivity.this, tab.getPosition(), true));
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                tabLayout.getTabAt(tab.getPosition()).setText(TabPagerAdapter.getTabText(MapActivity.this, tab.getPosition(), false));
             }
 
             @Override
@@ -190,12 +193,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 resetSlidePanelToAnchorPosition();
             }
         });
-
-        tabLayout.setTabTextColors(
-                ContextCompat.getColor(this, R.color.neutral_600),
-                ContextCompat.getColor(this, R.color.primary_main_grape_500)
-        );
-
     }
 
     private void resetSlidePanelToAnchorPosition() {
@@ -205,4 +202,5 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 break;
         }
     }
+
 }

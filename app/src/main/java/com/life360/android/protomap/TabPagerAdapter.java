@@ -28,9 +28,9 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
     public static final float TAB_UNSELECTED_FONT_SIZE_RATIO = 0.9f;
     public static final boolean NO_TITLE = true;
 
-    private static String tabTitles[] = new String[] { "People", "Places", "Safety", "Settings" };
+    public static String tabTitles[] = new String[] { "People", "Places", "Safety", "Settings" };
 
-    private static GoogleMaterial.Icon[] tabIcons = {
+    public static GoogleMaterial.Icon[] tabIcons = {
             GoogleMaterial.Icon.gmd_account_circle,
             GoogleMaterial.Icon.gmd_place,
             GoogleMaterial.Icon.gmd_warning,

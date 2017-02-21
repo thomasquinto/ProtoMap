@@ -1,5 +1,7 @@
 package com.life360.android.protomap;
 
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -13,6 +15,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -56,6 +59,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     View statusBar;
     @BindView(R.id.fake_nav_bar)
     View navBar;
+    @BindView(R.id.logo_icon)
+    ImageView logoIcon;
 
     private SlidingUpPanelLayout.PanelState slidePanelPreviousState;
 
@@ -71,6 +76,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         setupSlidePanel();
         setupTabs();
         setupWindowLayout();
+        setupProgressSpinner();
     }
 
     private void setupWindowLayout() {
@@ -139,19 +145,26 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                     int paddingTop = dpToPixels(STATUS_BAR_HEIGHT_DP) + (int) (paddingBottom * .45f);
                     map.setPadding(0, paddingTop, 0, paddingBottom);
                 } else {
-                    setBackgroundColor(statusBar, getStatusBarColor(slideOffset));
-                    setBackgroundColor(navBar, getStatusBarColor(slideOffset));
+                    Integer statusBarColor = getStatusBarColor(slideOffset);
+                    setBackgroundColor(statusBar, statusBarColor);
+                    setBackgroundColor(navBar, statusBarColor);
+                    logoIcon.setAlpha(1.0f - slideOffset);
                 }
             }
 
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                if (newState == HIDDEN) {
+                    showProgressSpinner();
+                } else {
+                    hideProgressSpinner();
+                }
             }
         });
     }
 
     private void setBackgroundColor(View view, Integer color) {
-        if(color != null) {
+        if (color != null) {
             view.setBackgroundColor(color);
         }
     }
@@ -196,10 +209,36 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
     private void resetSlidePanelToAnchorPosition() {
-        switch(slidePanel.getPanelState()) {
+        switch (slidePanel.getPanelState()) {
             case COLLAPSED:
                 slidePanel.setPanelState(ANCHORED);
                 break;
+        }
+    }
+
+    private void setupProgressSpinner() {
+        logoIcon.setBackground(ContextCompat.getDrawable(this, R.drawable.life360_logo_color_00045));
+    }
+
+    private void showProgressSpinner() {
+        final Drawable logoDrawable = logoIcon.getBackground();
+        if (!(logoDrawable instanceof AnimationDrawable)) {
+            logoIcon.setBackgroundResource(R.drawable.logo_on_trans);
+            final AnimationDrawable logoAnimation = (AnimationDrawable) logoIcon.getBackground();
+            logoIcon.post(new Runnable() {
+                @Override
+                public void run() {
+                    logoAnimation.start();
+                }
+            });
+        }
+    }
+
+    private void hideProgressSpinner() {
+        Drawable logoAnimation = logoIcon.getBackground();
+        if (logoAnimation instanceof AnimationDrawable) {
+            ((AnimationDrawable)logoAnimation).stop();
+            logoIcon.setBackground(ContextCompat.getDrawable(this, R.drawable.life360_logo_color_00045));
         }
     }
 

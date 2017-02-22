@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
  * Created by thomas on 2/21/17.
  */
 
-public class VerticalCardsFragment extends Fragment {
+public class VerticalCardFragment extends Fragment {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -27,9 +27,9 @@ public class VerticalCardsFragment extends Fragment {
     private Context context;
     private RecyclerView.Adapter adapter;
 
-    public VerticalCardsFragment() {}
+    public VerticalCardFragment() {}
 
-    public VerticalCardsFragment(Context context, RecyclerView.Adapter adapter) {
+    public VerticalCardFragment(Context context, RecyclerView.Adapter adapter) {
         this.context = context;
         this.adapter = adapter;
     }
@@ -48,7 +48,6 @@ public class VerticalCardsFragment extends Fragment {
 
         LinearLayoutManager llm = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(llm);
-        System.out.println("B");
 
         return view;
     }

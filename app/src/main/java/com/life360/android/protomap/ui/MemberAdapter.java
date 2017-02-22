@@ -1,7 +1,6 @@
 package com.life360.android.protomap.ui;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +25,8 @@ public class MemberAdapter extends RecyclerView.Adapter {
     public static class MemberViewHolder extends RecyclerView.ViewHolder {
         View view;
 
-        @BindView(R.id.member_photo)
-        ImageView memberPhoto;
+        @BindView(R.id.member_icon)
+        ImageView memberIcon;
         @BindView(R.id.member_name)
         TextView memberName;
         @BindView(R.id.member_address)
@@ -66,7 +65,7 @@ public class MemberAdapter extends RecyclerView.Adapter {
         MemberViewHolder memberViewHolder = (MemberViewHolder) viewHolder;
         memberViewHolder.memberName.setText(member.getName());
         memberViewHolder.memberAddress.setText(member.getAddress());
-        memberViewHolder.memberPhoto.setImageBitmap(member.getIcon((context)));
+        memberViewHolder.memberIcon.setImageBitmap(member.getIcon((context)));
     }
 
     @Override

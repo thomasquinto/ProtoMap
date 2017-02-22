@@ -225,9 +225,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private void setupTabs() {
         TabPagerAdapter tabPageAdapter = new TabPagerAdapter(getSupportFragmentManager(), this);
 
-        VerticalCardsFragment memberFragment = new VerticalCardsFragment(this, new MemberAdapter(this, members));
-
+        VerticalCardFragment memberFragment = new VerticalCardFragment(this, new MemberAdapter(this, members));
         tabPageAdapter.addFragment(0, memberFragment);
+
+        VerticalCardFragment placeFragment = new VerticalCardFragment(this, new PlaceAdapter(this, places));
+        tabPageAdapter.addFragment(1, placeFragment);
+
         tabViewPager.setAdapter(tabPageAdapter);
 
         tabLayout.setupWithViewPager(tabViewPager);

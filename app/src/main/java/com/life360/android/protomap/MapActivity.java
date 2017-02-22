@@ -11,21 +11,28 @@ import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.life360.android.protomap.model.Locatable;
+import com.life360.android.protomap.model.Member;
+import com.life360.android.protomap.model.Place;
+import com.life360.android.protomap.util.UiUtils;
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import butterknife.BindView;
@@ -37,8 +44,10 @@ import static com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.HIDDEN;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    public static final LatLng MAP_INIT_LOCATION = new LatLng(59.145833, 10.223611);
-    public static final int MAP_INIT_ZOOM_LEVEL = 10;
+    public static final LatLng MAP_INIT_LOCATION = new LatLng(37.7749, -122.4194); // SF
+    public static final int MAP_INIT_ZOOM_LEVEL = 1;
+    public static final int MAP_RADIUS_METERS = 100000;
+
     private GoogleMap map;
     private int mapHeight;
 
@@ -63,6 +72,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     ImageView logoIcon;
 
     private SlidingUpPanelLayout.PanelState slidePanelPreviousState;
+
+    // Model Data
+    private List<Locatable> members;
+    private List<Locatable> places;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,17 +112,42 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 @Override
                 public void onGlobalLayout() {
                     view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    mapHeight = view.getHeight() - SLIDE_PANEL_PARALLAX_OFFSET_PX - dpToPixels(STATUS_BAR_HEIGHT_DP);
+                    mapHeight = view.getHeight() - SLIDE_PANEL_PARALLAX_OFFSET_PX - UiUtils.dpToPixels(MapActivity.this, STATUS_BAR_HEIGHT_DP);
                     System.out.println("MAP HEIGHT: " + mapHeight);
+
+                    addMapMarkers(generateDummyData());
                 }
             });
         }
     }
 
+    private List<Locatable> generateDummyData() {
+        members = Member.generateDummyData(MAP_INIT_LOCATION, MAP_RADIUS_METERS);
+        places = Place.generateDummyData(MAP_INIT_LOCATION, MAP_RADIUS_METERS);
+
+        ArrayList<Locatable> locatables = new ArrayList<>();
+        locatables.addAll(members);
+        locatables.addAll(places);
+        return locatables;
+    }
+
+    private void addMapMarkers(List<Locatable> locatables) {
+        List<Marker> markers = Locatable.addMarkersToMap(MapActivity.this, locatables, map);
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Marker marker : markers) {
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+
+        int padding = UiUtils.dpToPixels(this, 50);
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        map.animateCamera(cu);
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        map.addMarker(new MarkerOptions().position(MAP_INIT_LOCATION));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(MAP_INIT_LOCATION, MAP_INIT_ZOOM_LEVEL));
 
         final AtomicBoolean toggle = new AtomicBoolean(true);
@@ -126,11 +164,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             }
         });
 
-        map.setPadding(0, dpToPixels(STATUS_BAR_HEIGHT_DP), 0, 0);
+        map.setPadding(0, UiUtils.dpToPixels(this, STATUS_BAR_HEIGHT_DP), 0, 0);
     }
 
     private void setupSlidePanel() {
-        slidePanel.setPanelHeight(dpToPixels(SLIDE_PANEL_RESTING_HEIGHT_DP));
+        slidePanel.setPanelHeight(UiUtils.dpToPixels(this, SLIDE_PANEL_RESTING_HEIGHT_DP));
         slidePanel.setAnchorPoint(SLIDE_PANEL_ANCHOR_POINT_RATIO);
         slidePanel.setParallaxOffset(SLIDE_PANEL_PARALLAX_OFFSET_PX);
         //slidePanel.setOverlayed(true);
@@ -142,7 +180,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             public void onPanelSlide(View panel, float slideOffset) {
                 if (slideOffset <= SLIDE_PANEL_ANCHOR_POINT_RATIO) {
                     int paddingBottom = (int) (slideOffset * mapHeight);
-                    int paddingTop = dpToPixels(STATUS_BAR_HEIGHT_DP) + (int) (paddingBottom * .45f);
+                    int paddingTop = UiUtils.dpToPixels(MapActivity.this, STATUS_BAR_HEIGHT_DP) + (int) (paddingBottom * .45f);
                     map.setPadding(0, paddingTop, 0, paddingBottom);
                 } else {
                     Integer statusBarColor = getStatusBarColor(slideOffset);
@@ -180,10 +218,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
 
         return null;
-    }
-
-    private int dpToPixels(int dpValue) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, getResources().getDisplayMetrics());
     }
 
     private void setupTabs() {

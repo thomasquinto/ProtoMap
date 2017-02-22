@@ -1,10 +1,12 @@
-package com.life360.android.protomap;
+package com.life360.android.protomap.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.life360.android.protomap.R;
 
 /**
  * Created by thomas on 2/21/17.

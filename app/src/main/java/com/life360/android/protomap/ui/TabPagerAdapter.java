@@ -1,4 +1,4 @@
-package com.life360.android.protomap;
+package com.life360.android.protomap.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -12,6 +12,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.RelativeSizeSpan;
 
+import com.life360.android.protomap.R;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 

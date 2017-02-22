@@ -1,4 +1,4 @@
-package com.life360.android.protomap;
+package com.life360.android.protomap.ui;
 
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
@@ -24,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.life360.android.protomap.R;
 import com.life360.android.protomap.model.Locatable;
 import com.life360.android.protomap.model.Member;
 import com.life360.android.protomap.model.Place;

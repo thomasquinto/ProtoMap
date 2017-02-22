@@ -20,7 +20,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.life360.android.protomap.MapActivity" />
+            tools:context="com.life360.android.protomap.ui.MapActivity" />
 
         <LinearLayout
             android:id="@+id/tab_container"

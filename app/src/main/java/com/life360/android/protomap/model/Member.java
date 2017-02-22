@@ -27,12 +27,13 @@ public class Member extends Locatable {
         this.iconResId = iconResId;
     }
 
-    public Bitmap getMapIcon(Context context) {
-        return UiUtils.getCircularBitmap(BitmapFactory.decodeResource(context.getResources(), iconResId), UiUtils.dpToPixels(context, ICON_SIZE_DP));
+    public Bitmap getIcon(Context context) {
+        return UiUtils.getCircularBitmap(BitmapFactory.decodeResource(context.getResources(), iconResId),
+                UiUtils.dpToPixels(context, ICON_SIZE_DP));
     }
 
-    public static List<Locatable> generateDummyData(LatLng latLng, int radius) {
-        ArrayList<Locatable> members = new ArrayList<>();
+    public static List<Member> generateDummyData(LatLng latLng, int radius) {
+        ArrayList<Member> members = new ArrayList<>();
 
         members.add(new Member("Aaron", LocationUtils.getRandomLocation(latLng, radius), R.drawable.member_aaron));
         members.add(new Member("Krystle", LocationUtils.getRandomLocation(latLng, radius), R.drawable.member_krystle));
@@ -41,6 +42,7 @@ public class Member extends Locatable {
         members.add(new Member("Thomas", LocationUtils.getRandomLocation(latLng, radius), R.drawable.member_thomas));
         members.add(new Member("Menka", LocationUtils.getRandomLocation(latLng, radius), R.drawable.member_menka));
         members.add(new Member("Viggo", LocationUtils.getRandomLocation(latLng, radius), R.drawable.member_viggo));
+        members.add(new Member("Speedy", LocationUtils.getRandomLocation(latLng, radius), R.drawable.member_speedy));
         members.add(new Member("Mrs. Smith", LocationUtils.getRandomLocation(latLng, radius), R.drawable.member_lady));
         members.add(new Member("Luis", LocationUtils.getRandomLocation(latLng, radius), R.drawable.member_mustache));
         members.add(new Member("Chewbacca", LocationUtils.getRandomLocation(latLng, radius), R.drawable.member_wooly));

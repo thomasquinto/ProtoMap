@@ -25,12 +25,12 @@ public class Place extends Locatable {
         this.iconResId = iconResId;
     }
 
-    public Bitmap getMapIcon(Context context) {
+    public Bitmap getIcon(Context context) {
         return BitmapFactory.decodeResource(context.getResources(), iconResId);
     }
 
-    public static List<Locatable> generateDummyData(LatLng latLng, int radius) {
-        ArrayList<Locatable> places = new ArrayList<>();
+    public static List<Place> generateDummyData(LatLng latLng, int radius) {
+        ArrayList<Place> places = new ArrayList<>();
 
         places.add(new Place("Default", LocationUtils.getRandomLocation(latLng, radius), R.drawable.places_mapicon_default));
         places.add(new Place("Home", LocationUtils.getRandomLocation(latLng, radius), R.drawable.places_mapicon_home));

@@ -16,6 +16,9 @@ import com.life360.android.protomap.R;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by thomas on 2/19/17.
  */
@@ -45,6 +48,12 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
         this.context = context;
     }
 
+    private Map<Integer,Fragment> fragmentMap = new HashMap<>();
+
+    public void addFragment(int position, Fragment fragment) {
+        fragmentMap.put(position, fragment);
+    }
+
     @Override
     public int getCount() {
         return tabTitles.length;
@@ -52,6 +61,11 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Fragment fragment = fragmentMap.get(position);
+        if (fragment != null) {
+            return fragment;
+        }
+
         return TabPageFragment.newInstance(position + 1);
     }
 

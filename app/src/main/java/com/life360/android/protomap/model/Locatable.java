@@ -19,7 +19,9 @@ import java.util.List;
 public abstract class Locatable  {
 
     private String name;
+    private String address;
     private LatLng latLng;
+    private long lastUpdated;
 
     public String getName() {
         return name;
@@ -27,6 +29,22 @@ public abstract class Locatable  {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(long lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public LatLng getLatLng() {
@@ -37,14 +55,14 @@ public abstract class Locatable  {
         this.latLng = latLng;
     }
 
-    public abstract Bitmap getMapIcon(Context context);
+    public abstract Bitmap getIcon(Context context);
 
-    public static List<Marker> addMarkersToMap(Context context, List<Locatable> locatables, GoogleMap map) {
+    public static List<Marker> addMarkersToMap(Context context, List<? extends Locatable> locatables, GoogleMap map) {
         ArrayList<Marker> markers = new ArrayList<>();
 
         for (Locatable locatable : locatables) {
             markers.add(map.addMarker(new MarkerOptions().position(locatable.getLatLng()).icon(
-                    BitmapDescriptorFactory.fromBitmap(locatable.getMapIcon(context)))));
+                    BitmapDescriptorFactory.fromBitmap(locatable.getIcon(context)))));
         }
 
         return markers;

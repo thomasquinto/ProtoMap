@@ -75,8 +75,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private SlidingUpPanelLayout.PanelState slidePanelPreviousState;
 
     // Model Data
-    private List<Locatable> members;
-    private List<Locatable> places;
+    private List<Member> members;
+    private List<Place> places;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +86,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
         LayoutInflaterCompat.setFactory(getLayoutInflater(), new IconicsLayoutInflater(AppCompatDelegate.create(this, null)));
 
+        generateDummyData();
+
         setupMapFragment();
         setupSlidePanel();
         setupTabs();
         setupWindowLayout();
         setupProgressSpinner();
+    }
+
+    private void generateDummyData() {
+        members = Member.generateDummyData(MAP_INIT_LOCATION, MAP_RADIUS_METERS);
+        places = Place.generateDummyData(MAP_INIT_LOCATION, MAP_RADIUS_METERS);
     }
 
     private void setupWindowLayout() {
@@ -102,7 +109,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
     private void setupMapFragment() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         // Will asynchronously invoke onMapReady
         mapFragment.getMapAsync(this);
 
@@ -116,23 +123,17 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                     mapHeight = view.getHeight() - SLIDE_PANEL_PARALLAX_OFFSET_PX - UiUtils.dpToPixels(MapActivity.this, STATUS_BAR_HEIGHT_DP);
                     System.out.println("MAP HEIGHT: " + mapHeight);
 
-                    addMapMarkers(generateDummyData());
+                    addMapMarkers();
                 }
             });
         }
     }
 
-    private List<Locatable> generateDummyData() {
-        members = Member.generateDummyData(MAP_INIT_LOCATION, MAP_RADIUS_METERS);
-        places = Place.generateDummyData(MAP_INIT_LOCATION, MAP_RADIUS_METERS);
-
+    private void addMapMarkers() {
         ArrayList<Locatable> locatables = new ArrayList<>();
         locatables.addAll(members);
         locatables.addAll(places);
-        return locatables;
-    }
 
-    private void addMapMarkers(List<Locatable> locatables) {
         List<Marker> markers = Locatable.addMarkersToMap(MapActivity.this, locatables, map);
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -222,7 +223,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
     private void setupTabs() {
-        tabViewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), this));
+        TabPagerAdapter tabPageAdapter = new TabPagerAdapter(getSupportFragmentManager(), this);
+
+        VerticalCardsFragment memberFragment = new VerticalCardsFragment(this, new MemberAdapter(this, members));
+
+        tabPageAdapter.addFragment(0, memberFragment);
+        tabViewPager.setAdapter(tabPageAdapter);
+
         tabLayout.setupWithViewPager(tabViewPager);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

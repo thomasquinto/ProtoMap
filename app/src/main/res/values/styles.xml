@@ -16,4 +16,12 @@
         <item name="android:textSize">18sp</item>
         <item name="textAllCaps">false</item>
     </style>
+
+    <!-- From Coordinator Examples -->
+    <style name="ToolBarWithNavigationBack">
+        <!--
+        <item name="navigationIcon">@drawable/abc_ic_ab_back_mtrl_am_alpha</item>
+        -->
+    </style>
+
 </resources>

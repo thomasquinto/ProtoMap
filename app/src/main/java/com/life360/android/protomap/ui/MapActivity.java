@@ -1,5 +1,6 @@
 package com.life360.android.protomap.ui;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.life360.android.protomap.R;
+import com.life360.android.protomap.example.MaterialUpConceptActivity;
 import com.life360.android.protomap.model.Locatable;
 import com.life360.android.protomap.model.Member;
 import com.life360.android.protomap.model.Place;
@@ -239,6 +241,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             public void onTabSelected(TabLayout.Tab tab) {
                 resetSlidePanelToAnchorPosition();
                 tabLayout.getTabAt(tab.getPosition()).setText(TabPagerAdapter.getTabText(MapActivity.this, tab.getPosition(), true));
+
+                if (tab.getPosition() == 3) {
+                    MaterialUpConceptActivity.start(MapActivity.this);
+                }
             }
 
             @Override

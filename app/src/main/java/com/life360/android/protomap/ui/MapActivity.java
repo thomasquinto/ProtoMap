@@ -55,7 +55,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     private static final int STATUS_BAR_HEIGHT_DP = 24;
     private static final int NAV_BAR_HEIGHT_DP = 48;
-    private static final int SLIDE_PANEL_RESTING_HEIGHT_DP = NAV_BAR_HEIGHT_DP * 2;
+    private static final int SLIDE_PANEL_RESTING_HEIGHT_DP = NAV_BAR_HEIGHT_DP * 2 + 8;
     private static final float SLIDE_PANEL_ANCHOR_POINT_RATIO = 0.25f;
     private static final int SLIDE_PANEL_PARALLAX_OFFSET_PX = 500;
     private static final int STATUS_BAR_COLOR = R.color.primary_main_grape_500;
@@ -104,8 +104,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private void setupWindowLayout() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            /*
             setBackgroundColor(statusBar, getStatusBarColor(SLIDE_PANEL_ANCHOR_POINT_RATIO));
             setBackgroundColor(navBar, getStatusBarColor(SLIDE_PANEL_ANCHOR_POINT_RATIO));
+            */
+            setBackgroundColor(statusBar, ContextCompat.getColor(this, R.color.primary_main_grape_500));
+            setBackgroundColor(navBar, ContextCompat.getColor(this, R.color.primary_main_grape_500));
         }
     }
 
@@ -160,8 +164,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 if (toggle.get()) {
                     slidePanelPreviousState = slidePanel.getPanelState();
                     slidePanel.setPanelState(HIDDEN);
+
+                    setBackgroundColor(statusBar, getStatusBarColor(SLIDE_PANEL_ANCHOR_POINT_RATIO));
+                    setBackgroundColor(navBar, getStatusBarColor(SLIDE_PANEL_ANCHOR_POINT_RATIO));
                 } else {
                     slidePanel.setPanelState(slidePanelPreviousState);
+
+                    setBackgroundColor(statusBar, ContextCompat.getColor(MapActivity.this, R.color.primary_main_grape_500));
+                    setBackgroundColor(navBar, ContextCompat.getColor(MapActivity.this, R.color.primary_main_grape_500));
                 }
                 toggle.set(!toggle.get());
             }
@@ -186,9 +196,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                     int paddingTop = UiUtils.dpToPixels(MapActivity.this, STATUS_BAR_HEIGHT_DP) + (int) (paddingBottom * .45f);
                     map.setPadding(0, paddingTop, 0, paddingBottom);
                 } else {
+                    /*
                     Integer statusBarColor = getStatusBarColor(slideOffset);
                     setBackgroundColor(statusBar, statusBarColor);
                     setBackgroundColor(navBar, statusBarColor);
+                    */
                     logoIcon.setAlpha(1.0f - slideOffset);
                 }
             }

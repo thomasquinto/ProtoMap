@@ -1,6 +1,7 @@
 package com.life360.android.protomap.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -34,7 +35,7 @@ public class LocatableFragment extends Fragment {
         Context context = container.getContext();
 
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_locatable, container, false);
-        viewGroup.setBackgroundColor(ContextCompat.getColor(container.getContext(), R.color.main_blueberry_500));
+        viewGroup.setBackgroundColor(Color.parseColor("#FAFAFA"));//ContextCompat.getColor(container.getContext(), R.color.main_blueberry_500));
 
         View view;
         if (locatable instanceof Member) {

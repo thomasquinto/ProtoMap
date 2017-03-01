@@ -25,8 +25,8 @@ import java.util.Map;
 
 public class TabPagerAdapter extends FragmentPagerAdapter {
 
-    public static final int TAB_COLOR_RES_ID = R.color.neutral_400;
-    public static final int TAB_SELECTED_COLOR_RES_ID = R.color.primary_main_grape_500;
+    public static final int TAB_COLOR_RES_ID = android.R.color.white;
+    public static final int TAB_SELECTED_COLOR_RES_ID = android.R.color.black;
     public static final int TAB_ICON_FONT_SIZE_DP = 28;
     public static final int TAB_ICON_SELECTED_FONT_SIZE_DP = 32;
     public static final float TAB_UNSELECTED_FONT_SIZE_RATIO = 0.9f;

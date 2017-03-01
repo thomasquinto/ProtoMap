@@ -36,7 +36,7 @@ public class TabPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_page, container, false);
         TextView textView = (TextView) view.findViewById(R.id.text_view);
-        textView.setText("Fragment #" + mPage);
+        //textView.setText("Fragment #" + mPage);
         return view;
     }
 }

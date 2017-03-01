@@ -1,6 +1,5 @@
 package com.life360.android.protomap.ui;
 
-import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -227,10 +226,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private void setupTabs() {
         TabPagerAdapter tabPageAdapter = new TabPagerAdapter(getSupportFragmentManager(), this);
 
-        VerticalCardFragment memberFragment = new VerticalCardFragment(this, new MemberAdapter(this, members));
+        //VerticalCardFragment memberFragment = new VerticalCardFragment(this, new MemberAdapter(this, members));
+        HorizontalCardsFragment memberFragment = new HorizontalCardsFragment(this, members);
         tabPageAdapter.addFragment(0, memberFragment);
 
-        VerticalCardFragment placeFragment = new VerticalCardFragment(this, new PlaceAdapter(this, places));
+        //VerticalCardFragment placeFragment = new VerticalCardFragment(this, new PlaceAdapter(this, places));
+        HorizontalCardsFragment placeFragment = new HorizontalCardsFragment(this, places);
         tabPageAdapter.addFragment(1, placeFragment);
 
         tabViewPager.setAdapter(tabPageAdapter);

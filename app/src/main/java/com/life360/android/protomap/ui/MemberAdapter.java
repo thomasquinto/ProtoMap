@@ -53,7 +53,7 @@ public class MemberAdapter extends RecyclerView.Adapter {
 
     @Override
     public MemberViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.member_card, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_member, viewGroup, false);
         MemberViewHolder viewHolder = new MemberViewHolder(view);
         return viewHolder;
     }

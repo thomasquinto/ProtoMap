@@ -2,7 +2,6 @@ package com.life360.android.protomap.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +18,7 @@ import butterknife.ButterKnife;
  * Created by thomas on 2/21/17.
  */
 
-public class VerticalCardFragment extends Fragment {
+public class VerticalCardsFragment extends Fragment {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -27,9 +26,9 @@ public class VerticalCardFragment extends Fragment {
     private Context context;
     private RecyclerView.Adapter adapter;
 
-    public VerticalCardFragment() {}
+    public VerticalCardsFragment() {}
 
-    public VerticalCardFragment(Context context, RecyclerView.Adapter adapter) {
+    public VerticalCardsFragment(Context context, RecyclerView.Adapter adapter) {
         this.context = context;
         this.adapter = adapter;
     }
@@ -41,7 +40,7 @@ public class VerticalCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.vertical_card_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_vertical_cards, container, false);
         ButterKnife.bind(this, view);
 
         recyclerView.setAdapter(adapter);

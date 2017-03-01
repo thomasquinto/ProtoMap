@@ -38,14 +38,14 @@ public class LocatableFragment extends Fragment {
 
         View view;
         if (locatable instanceof Member) {
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.member_card, viewGroup, false);
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_member, viewGroup, false);
             viewGroup.addView(view);
 
             ((TextView) view.findViewById(R.id.member_name)).setText(locatable.getName());
             ((ImageView) view.findViewById(R.id.member_icon)).setImageBitmap(locatable.getIcon(context));
 
         } else if (locatable instanceof Place) {
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.place_card, viewGroup, false);
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_place, viewGroup, false);
             viewGroup.addView(view);
 
             ((TextView) view.findViewById(R.id.place_name)).setText(locatable.getName());

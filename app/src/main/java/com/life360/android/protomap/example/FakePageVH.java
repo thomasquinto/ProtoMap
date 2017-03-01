@@ -11,7 +11,7 @@ import android.view.View;
 
 public class FakePageVH extends RecyclerView.ViewHolder {
 
-		public FakePageVH(View itemView) {
-			super(itemView);
-		}
+	public FakePageVH(View itemView) {
+		super(itemView);
 	}
+}

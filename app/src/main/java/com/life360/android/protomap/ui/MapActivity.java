@@ -82,7 +82,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map_activity);
+        setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
 
         LayoutInflaterCompat.setFactory(getLayoutInflater(), new IconicsLayoutInflater(AppCompatDelegate.create(this, null)));

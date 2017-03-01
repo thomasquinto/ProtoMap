@@ -53,7 +53,7 @@ public class PlaceAdapter extends RecyclerView.Adapter {
 
     @Override
     public PlaceViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.place_card, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_place, viewGroup, false);
         PlaceViewHolder viewHolder = new PlaceViewHolder(view);
         return viewHolder;
     }

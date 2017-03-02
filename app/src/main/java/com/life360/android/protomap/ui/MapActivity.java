@@ -1,5 +1,7 @@
 package com.life360.android.protomap.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -94,6 +96,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         setupTabs();
         setupWindowLayout();
         setupProgressSpinner();
+    }
+
+    public static void start(Context c) {
+        c.startActivity(new Intent(c, MapActivity.class));
     }
 
     private void generateDummyData() {
@@ -238,12 +244,28 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private void setupTabs() {
         TabPagerAdapter tabPageAdapter = new TabPagerAdapter(getSupportFragmentManager(), this);
 
+        final ViewPager.OnPageChangeListener onMemberChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                Member member = members.get(position);
+                zoomOnLocatable(member);
+            }
+        };
+
+        final ViewPager.OnPageChangeListener onPlaceChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                Place place = places.get(position);
+                zoomOnLocatable(place);
+            }
+        };
+
         //VerticalCardFragment memberFragment = new VerticalCardFragment(this, new MemberAdapter(this, members));
-        HorizontalCardsFragment memberFragment = new HorizontalCardsFragment(this, members);
+        HorizontalCardsFragment memberFragment = new HorizontalCardsFragment(this, members, onMemberChangeListener);
         tabPageAdapter.addFragment(0, memberFragment);
 
         //VerticalCardFragment placeFragment = new VerticalCardFragment(this, new PlaceAdapter(this, places));
-        HorizontalCardsFragment placeFragment = new HorizontalCardsFragment(this, places);
+        HorizontalCardsFragment placeFragment = new HorizontalCardsFragment(this, places, onPlaceChangeListener);
         tabPageAdapter.addFragment(1, placeFragment);
 
         tabViewPager.setAdapter(tabPageAdapter);
@@ -270,6 +292,16 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 resetSlidePanelToAnchorPosition();
             }
         });
+    }
+
+    private void zoomOnLocatable(Locatable locatable) {
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(locatable.getLatLng(), 15), 1000, null);
+        /*
+        // Zoom in, animating the camera.
+        map.animateCamera(CameraUpdateFactory.zoomIn());
+        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+        map.animateCamera(CameraUpdateFactory.zoomTo(14), 1000, null);
+        */
     }
 
     private void resetSlidePanelToAnchorPosition() {

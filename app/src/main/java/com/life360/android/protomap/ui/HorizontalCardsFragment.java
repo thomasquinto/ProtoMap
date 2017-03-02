@@ -27,12 +27,14 @@ public class HorizontalCardsFragment extends Fragment {
 
     private Context context;
     private List<? extends Locatable> locatables;
+    private ViewPager.OnPageChangeListener onPageChangeListener;
 
     public HorizontalCardsFragment() {}
 
-    public HorizontalCardsFragment(Context context, List<? extends Locatable> locatables) {
+    public HorizontalCardsFragment(Context context, List<? extends Locatable> locatables, ViewPager.OnPageChangeListener onPageChangeListener) {
         this.context = context;
         this.locatables = locatables;
+        this.onPageChangeListener = onPageChangeListener;
     }
 
     @Override
@@ -46,6 +48,10 @@ public class HorizontalCardsFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         locatablePager.setAdapter(new LocatablePagerAdapter(getChildFragmentManager(), locatables));
+        if (onPageChangeListener != null) {
+            System.out.println("SETTING PAGE LISTENER");
+            locatablePager.addOnPageChangeListener(onPageChangeListener);
+        }
 
         return view;
     }

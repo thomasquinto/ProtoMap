@@ -2,6 +2,7 @@ package com.life360.android.protomap.example;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -14,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -28,8 +30,11 @@ import com.life360.android.protomap.model.Locatable;
 import com.life360.android.protomap.model.Member;
 import com.life360.android.protomap.model.Place;
 import com.life360.android.protomap.ui.HorizontalCardsFragment;
+import com.life360.android.protomap.ui.MapActivity;
 import com.life360.android.protomap.ui.TabPagerAdapter;
 import com.life360.android.protomap.util.UiUtils;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +46,7 @@ import butterknife.ButterKnife;
 import static com.life360.android.protomap.ui.MapActivity.MAP_INIT_LOCATION;
 import static com.life360.android.protomap.ui.MapActivity.MAP_INIT_ZOOM_LEVEL;
 import static com.life360.android.protomap.ui.MapActivity.MAP_RADIUS_METERS;
+import static com.life360.android.protomap.ui.TabPagerAdapter.TAB_ICON_SELECTED_FONT_SIZE_DP;
 
 public class MaterialUpConceptActivity extends AppCompatActivity
 	implements AppBarLayout.OnOffsetChangedListener, OnMapReadyCallback, View.OnTouchListener {
@@ -76,14 +82,6 @@ public class MaterialUpConceptActivity extends AppCompatActivity
 		});
 		params.setBehavior(behavior);
 
-		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-		fab.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mEnableMapScrolling = !mEnableMapScrolling;
-			}
-		});
-
 		/*
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.materialup_tabs);
 		ViewPager viewPager  = (ViewPager) findViewById(R.id.materialup_viewpager);
@@ -96,6 +94,7 @@ public class MaterialUpConceptActivity extends AppCompatActivity
 		generateDummyData();
 		setupMapFragment();
 		setupTabs();
+		setupFab();
 	}
 
 	public static void start(Context c) {
@@ -166,12 +165,26 @@ public class MaterialUpConceptActivity extends AppCompatActivity
 	private List<Place> places;
 
 	private GoogleMap map;
+	private List<Marker> markers;
 
 	private void setupMapFragment() {
 		final TouchableMapFragment mapFragment = (TouchableMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 		// Will asynchronously invoke onMapReady
 		mapFragment.getMapAsync(this);
 		mapFragment.setOnTouchListener(this);
+
+
+		final View view = mapFragment.getView();
+		final ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
+		if (viewTreeObserver.isAlive()) {
+			viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+				@Override
+				public void onGlobalLayout() {
+					view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+					addMapMarkers();
+				}
+			});
+		}
 	}
 
 	@Override
@@ -186,8 +199,6 @@ public class MaterialUpConceptActivity extends AppCompatActivity
 				toggle.set(!toggle.get());
 			}
 		});
-
-		addMapMarkers();
 	}
 
 	// OnTouchListener
@@ -213,17 +224,8 @@ public class MaterialUpConceptActivity extends AppCompatActivity
 		locatables.addAll(members);
 		locatables.addAll(places);
 
-		List<Marker> markers = Locatable.addMarkersToMap(this, locatables, map);
-
-		LatLngBounds.Builder builder = new LatLngBounds.Builder();
-		for (Marker marker : markers) {
-			builder.include(marker.getPosition());
-		}
-		LatLngBounds bounds = builder.build();
-
-		int padding = UiUtils.dpToPixels(this, 50);
-		CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-		map.animateCamera(cu);
+		markers = Locatable.addMarkersToMap(this, locatables, map);
+		zoomForAllLocatables();
 	}
 
 	private void setupTabs() {
@@ -277,9 +279,38 @@ public class MaterialUpConceptActivity extends AppCompatActivity
 		map.animateCamera(CameraUpdateFactory.newLatLngZoom(locatable.getLatLng(), 15), 1000, null);
 	}
 
+	private void zoomForAllLocatables() {
+		LatLngBounds.Builder builder = new LatLngBounds.Builder();
+		for (Marker marker : markers) {
+			builder.include(marker.getPosition());
+		}
+		LatLngBounds bounds = builder.build();
+
+		int padding = UiUtils.dpToPixels(this, 50);
+		CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+		map.animateCamera(cu);
+	}
+
 	private void generateDummyData() {
 		members = Member.generateDummyData(MAP_INIT_LOCATION, MAP_RADIUS_METERS);
 		places = Place.generateDummyData(MAP_INIT_LOCATION, MAP_RADIUS_METERS);
 	}
 
+	private void setupFab() {
+
+		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+		fab.setImageDrawable(new IconicsDrawable(this)
+				.icon(GoogleMaterial.Icon.gmd_people)
+				.color(Color.WHITE)
+				.sizeDp(TAB_ICON_SELECTED_FONT_SIZE_DP));
+
+		fab.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				zoomForAllLocatables();
+
+				mEnableMapScrolling = !mEnableMapScrolling;
+			}
+		});
+	}
 }

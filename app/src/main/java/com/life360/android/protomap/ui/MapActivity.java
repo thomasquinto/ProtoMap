@@ -1,22 +1,27 @@
 package com.life360.android.protomap.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,9 +37,12 @@ import com.life360.android.protomap.model.Locatable;
 import com.life360.android.protomap.model.Member;
 import com.life360.android.protomap.model.Place;
 import com.life360.android.protomap.util.UiUtils;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -42,8 +50,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+import static com.life360.android.protomap.ui.TabPagerAdapter.TAB_ICON_SELECTED_FONT_SIZE_DP;
 import static com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.ANCHORED;
 import static com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.COLLAPSED;
+import static com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.EXPANDED;
 import static com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.HIDDEN;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -53,6 +64,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     public static final int MAP_RADIUS_METERS = 100000;
 
     private GoogleMap map;
+    private List<Marker> markers;
     private int mapHeight;
 
     private static final int STATUS_BAR_HEIGHT_DP = 24;
@@ -74,6 +86,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     View navBar;
     @BindView(R.id.logo_icon)
     ImageView logoIcon;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     private SlidingUpPanelLayout.PanelState slidePanelPreviousState;
 
@@ -96,6 +110,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         setupTabs();
         setupWindowLayout();
         setupProgressSpinner();
+        setupFab();
     }
 
     public static void start(Context c) {
@@ -145,8 +160,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         locatables.addAll(members);
         locatables.addAll(places);
 
-        List<Marker> markers = Locatable.addMarkersToMap(MapActivity.this, locatables, map);
+        markers = Locatable.addMarkersToMap(MapActivity.this, locatables, map);
+        zoomForAllLocatables();
+    }
 
+    private void zoomForAllLocatables() {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (Marker marker : markers) {
             builder.include(marker.getPosition());
@@ -158,9 +176,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         map.animateCamera(cu);
     }
 
+    private void zoomOnLocatable(Locatable locatable) {
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(locatable.getLatLng(), 15), 1000, null);
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        map.getUiSettings().setMapToolbarEnabled(false);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(MAP_INIT_LOCATION, MAP_INIT_ZOOM_LEVEL));
 
         final AtomicBoolean toggle = new AtomicBoolean(true);
@@ -278,7 +301,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 tabLayout.getTabAt(tab.getPosition()).setText(TabPagerAdapter.getTabText(MapActivity.this, tab.getPosition(), true));
 
                 if (tab.getPosition() == 3) {
-                    MaterialUpConceptActivity.start(MapActivity.this);
+                    askToOpenDemo();
                 }
             }
 
@@ -294,14 +317,25 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         });
     }
 
-    private void zoomOnLocatable(Locatable locatable) {
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(locatable.getLatLng(), 15), 1000, null);
-        /*
-        // Zoom in, animating the camera.
-        map.animateCamera(CameraUpdateFactory.zoomIn());
-        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
-        map.animateCamera(CameraUpdateFactory.zoomTo(14), 1000, null);
-        */
+    private void askToOpenDemo() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int choice) {
+                switch (choice) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        MaterialUpConceptActivity.start(MapActivity.this);
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("See Demo #2?\n\n(Click Back button to return here)")
+                .setPositiveButton("YES", dialogClickListener)
+                .setNegativeButton("NO", dialogClickListener)
+                .show();
     }
 
     private void resetSlidePanelToAnchorPosition() {
@@ -336,6 +370,23 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             ((AnimationDrawable)logoAnimation).stop();
             logoIcon.setBackground(ContextCompat.getDrawable(this, R.drawable.life360_logo_color_00045));
         }
+    }
+
+    private void setupFab() {
+        fab.setImageDrawable(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_people)
+                .color(Color.WHITE)
+                .sizeDp(TAB_ICON_SELECTED_FONT_SIZE_DP));
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                zoomForAllLocatables();
+                if (slidePanel.getPanelState() == EXPANDED) {
+                    slidePanel.setPanelState(COLLAPSED);
+                }
+            }
+        });
     }
 
 }

@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,7 +41,6 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -50,7 +48,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static com.life360.android.protomap.ui.TabPagerAdapter.TAB_ICON_SELECTED_FONT_SIZE_DP;
 import static com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.ANCHORED;
 import static com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.COLLAPSED;

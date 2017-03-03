@@ -49,7 +49,6 @@ public class HorizontalCardsFragment extends Fragment {
 
         locatablePager.setAdapter(new LocatablePagerAdapter(getChildFragmentManager(), locatables));
         if (onPageChangeListener != null) {
-            System.out.println("SETTING PAGE LISTENER");
             locatablePager.addOnPageChangeListener(onPageChangeListener);
         }
 

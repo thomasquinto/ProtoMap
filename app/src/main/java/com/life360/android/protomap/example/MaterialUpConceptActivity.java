@@ -30,7 +30,6 @@ import com.life360.android.protomap.model.Locatable;
 import com.life360.android.protomap.model.Member;
 import com.life360.android.protomap.model.Place;
 import com.life360.android.protomap.ui.HorizontalCardsFragment;
-import com.life360.android.protomap.ui.MapActivity;
 import com.life360.android.protomap.ui.TabPagerAdapter;
 import com.life360.android.protomap.util.UiUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;

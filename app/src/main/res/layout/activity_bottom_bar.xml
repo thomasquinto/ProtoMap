@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinatorlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/translucent">
+
+            <TextView
+                android:id="@+id/text_favorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/lorem"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/text_schedules"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/lorem"
+                android:visibility="gone"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/text_music"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/lorem"
+                android:visibility="gone"
+                android:textSize="20dp" />
+
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        app:bb_inActiveTabAlpha="1.0"
+        app:bb_inActiveTabColor="@color/neutral_400"
+        app:bb_activeTabAlpha="1.0"
+        app:bb_activeTabColor="@android:color/white"
+        app:bb_behavior="underNavbar|shy"
+        app:bb_tabXmlResource="@xml/tabs_bottom_bar" />
+
+</android.support.design.widget.CoordinatorLayout>
+
+<!--
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:id="@+id/contentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomBar" />
+
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        app:bb_behavior="underNavbar"
+        app:bb_tabXmlResource="@xml/tabs_bottom_bar" />
+
+</RelativeLayout>
+-->

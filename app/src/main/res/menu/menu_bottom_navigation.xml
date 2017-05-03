@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_people"
+        android:icon="@drawable/ic_account_circle"
+        android:title="@string/tab1"
+        app:showAsAction="ifRoom"
+        android:enabled="true" />
+    <item
+        android:id="@+id/action_places"
+        android:icon="@drawable/ic_place"
+        android:title="@string/tab2"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_safety"
+        android:icon="@drawable/ic_warning"
+        android:title="@string/tab3"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/tab4"
+        app:showAsAction="ifRoom" />
+</menu>

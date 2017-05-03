@@ -35,6 +35,8 @@ import com.life360.android.protomap.example.MaterialUpConceptActivity;
 import com.life360.android.protomap.model.Locatable;
 import com.life360.android.protomap.model.Member;
 import com.life360.android.protomap.model.Place;
+import com.life360.android.protomap.tab.BottomNavigationActivity;
+import com.life360.android.protomap.tab.BottomBarActivity;
 import com.life360.android.protomap.util.UiUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -310,28 +312,38 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 resetSlidePanelToAnchorPosition();
+
+                if (tab.getPosition() == 3) {
+                    askToOpenDemo();
+                }
             }
         });
     }
 
     private void askToOpenDemo() {
+
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int choice) {
                 switch (choice) {
-                    case DialogInterface.BUTTON_POSITIVE:
+                    case DialogInterface.BUTTON_NEUTRAL:
                         MaterialUpConceptActivity.start(MapActivity.this);
                         break;
+                    case DialogInterface.BUTTON_POSITIVE:
+                        BottomBarActivity.start(MapActivity.this);
+                        break;
                     case DialogInterface.BUTTON_NEGATIVE:
+                        BottomNavigationActivity.start(MapActivity.this);
                         break;
                 }
             }
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("See Demo #2?\n\n(Click Back button to return here)")
-                .setPositiveButton("YES", dialogClickListener)
-                .setNegativeButton("NO", dialogClickListener)
+        builder.setMessage("See Another Demo?")
+                .setNeutralButton("Map #2", dialogClickListener)
+                .setPositiveButton("Tabs #2", dialogClickListener)
+                .setNegativeButton("Tabs #1", dialogClickListener)
                 .show();
     }
 

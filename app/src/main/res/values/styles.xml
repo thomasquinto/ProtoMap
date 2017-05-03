@@ -24,4 +24,15 @@
         -->
     </style>
 
+    <style name="BottomNavigationTheme" parent="AppTheme">
+        <item name="colorControlHighlight">@color/main_blueberry_500</item>
+    </style>
+
+    <style name="BottomBarTheme" parent="AppTheme">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+
 </resources>

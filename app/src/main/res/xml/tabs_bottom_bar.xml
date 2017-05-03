@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_people"
+        icon="@drawable/ic_account_circle_sm"
+        title="People"
+        barColorWhenSelected="@color/main_blueberry_500"
+        />
+    <tab
+        id="@+id/tab_places"
+        icon="@drawable/ic_place_sm"
+        title="Places"
+        barColorWhenSelected="@color/main_kale_500"
+        />
+    <tab
+        id="@+id/tab_safety"
+        icon="@drawable/ic_warning_sm"
+        title="Safety"
+        barColorWhenSelected="@color/main_fig_500"
+        />
+    <tab
+        id="@+id/tab_profile"
+        icon="@drawable/ic_settings_sm"
+        title="Profile"
+        barColorWhenSelected="@color/primary_main_grape_500"
+        />
+</tabs>

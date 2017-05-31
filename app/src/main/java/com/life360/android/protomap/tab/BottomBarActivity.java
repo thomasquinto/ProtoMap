@@ -38,6 +38,7 @@ public class BottomBarActivity extends FragmentActivity {
         c.startActivity(new Intent(c, BottomBarActivity.class));
     }
 
+    @BindView(R.id.bottomBar)
     BottomBar bottomBar;
 
     @BindView(R.id.tab1)
@@ -55,7 +56,6 @@ public class BottomBarActivity extends FragmentActivity {
         setContentView(R.layout.activity_bottom_bar);
         ButterKnife.bind(this);
 
-        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -70,6 +70,9 @@ public class BottomBarActivity extends FragmentActivity {
                 switchTab(tabId);
             }
         });
+
+        bottomBar.setBadgeBackgroundColor(ContextCompat.getColor(this, R.color.main_watermelon_500));
+        bottomBar.getTabAtPosition(3).setBadgeCount(3);
 
         setupMapFragment();
     }

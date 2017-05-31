@@ -131,7 +131,9 @@ public final class BottomNavigationBehavior<V extends View> extends VerticalScro
 
     @Override
     public void onDirectionNestedPreScroll(CoordinatorLayout coordinatorLayout, V child, View target, int dx, int dy, int[] consumed, @ScrollDirection int scrollDirection) {
-        handleDirection(child, scrollDirection);
+        if (!TQ_SCROLL_BEHAVIOR) {
+            handleDirection(child, scrollDirection);
+        }
     }
 
     private void handleDirection(V child, @ScrollDirection int scrollDirection) {
@@ -147,7 +149,9 @@ public final class BottomNavigationBehavior<V extends View> extends VerticalScro
 
     @Override
     protected boolean onNestedDirectionFling(CoordinatorLayout coordinatorLayout, V child, View target, float velocityX, float velocityY, @ScrollDirection int scrollDirection) {
-        handleDirection(child, scrollDirection);
+        if (!TQ_SCROLL_BEHAVIOR) {
+            handleDirection(child, scrollDirection);
+        }
         return true;
     }
 
@@ -240,5 +244,34 @@ public final class BottomNavigationBehavior<V extends View> extends VerticalScro
                 );
             }
         }
+    }
+
+    // TQ Added
+    private static final boolean TQ_SCROLL_BEHAVIOR = true;
+
+    @Override
+    public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, V child, View target) {
+        if (TQ_SCROLL_BEHAVIOR) {
+            if (hidden) {
+                hidden = false;
+                animateOffset(child, 0);
+            }
+        }
+
+        super.onStopNestedScroll(coordinatorLayout, child, target);
+    }
+
+    @Override
+    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, V child, View directTargetChild, View target, int nestedScrollAxes) {
+        if (TQ_SCROLL_BEHAVIOR) {
+            if (!hidden) {
+                hidden = true;
+                animateOffset(child, child.getHeight());
+            }
+
+            return true;
+        }
+
+        return super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, nestedScrollAxes);
     }
 }

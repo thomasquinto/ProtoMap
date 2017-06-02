@@ -51,6 +51,12 @@
         </activity>
 
         <activity
+            android:name=".tabbar.TabBarActivity"
+            android:theme="@style/BottomBarTheme"
+            android:label="@string/title_activity_map">
+        </activity>
+
+        <activity
             android:theme="@style/BottomNavigationTheme"
             android:name=".tab.BottomNavigationActivity"
             android:label="@string/title_activity_map">

@@ -8,7 +8,7 @@
 
     <color name="colorPrimaryTranslucent">#663F51B5</color>
 
-    <!-- BEGIN from NEW Style Guide -->
+    <!-- BEGIN from OLD Style Guide -->
     <!-- http://wiki.dev.life360.com/display/PROD/Color -->
 
     <!-- Grape -->
@@ -69,5 +69,35 @@
     <color name="pumpkin_100">#FFE1DE</color>
     <color name="main_pumpkin_translucent">#66FF6A59</color>
 
+    <!-- END from OLD Style Guide -->
+
+    <!-- BEGIN from NEW Style Guide -->
+
+    <color name="grape_500">#AC54DA</color>
+    <color name="grape_100">#CBA3E0</color>
+
+    <color name="pink_500">#DF2883</color>
+    <color name="pink_100">#F09CC6</color>
+
+    <color name="orange_500">#F06757</color>
+    <color name="orange_100">#FFB4A2</color>
+
+    <color name="gold_500">#F8B221</color>
+    <color name="gold_100">#F6D185</color>
+
+    <color name="lime_500">#8BD559</color>
+    <color name="lime_100">#BFE3A7</color>
+
+    <color name="blue_500">#57B4DA</color>
+    <color name="blue_100">#A7D6EA</color>
+
+    <color name="grey_900">#212121</color>
+    <color name="grey_700">#616161</color>
+    <color name="grey_400">#BDBDBD</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_50">#F9F9F9F9</color>
+    <color name="white">#FFFFFF</color>
+
     <!-- END from NEW Style Guide -->
+
 </resources>

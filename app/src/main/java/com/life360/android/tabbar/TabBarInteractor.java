@@ -30,11 +30,19 @@ public class TabBarInteractor extends Interactor implements TabBarInteractorInpu
 
     // TabBarInteractorInput Implementors
 
+    @Override
     public void onTabBarInitialized() {
+        //presenter.selectTab(TAB_PLACES);
         presenter.setBadgeCount(TAB_PROFILE, 5);
     }
 
-    public void onTabSelected(int tabType) {
+    @Override
+    public void onTabBarDestroyed() {
+        dispose();
+    }
 
+    @Override
+    public void onTabSelected(int tabType) {
+        System.out.println("Tab Selected for type: " + tabType);
     }
 }

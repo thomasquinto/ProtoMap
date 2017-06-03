@@ -14,11 +14,16 @@ public class TabBarPresenter<V extends TabBarPresenterOutput> extends TabBarPres
         interactor.onTabBarInitialized();
     }
 
+    @Override
+    public void onDetachView(TabBarPresenterOutput view) {
+        interactor.onTabBarDestroyed();
+    }
+
     // TabBarPresenterInput Implementors
 
     @Override
     public void tabSelected(int tabType) {
-
+        interactor.onTabSelected(tabType);
     }
 
     // TabBarInteractorOutput Implementors
@@ -30,7 +35,9 @@ public class TabBarPresenter<V extends TabBarPresenterOutput> extends TabBarPres
 
     @Override
     public void selectTab(int tabType) {
-
+        if (getView() != null) {
+            getView().selectTab(tabType);
+        }
     }
 
     @Override
@@ -39,6 +46,5 @@ public class TabBarPresenter<V extends TabBarPresenterOutput> extends TabBarPres
             getView().setBadgeCount(tabType, badgeCount);
         }
     }
-
 
 }

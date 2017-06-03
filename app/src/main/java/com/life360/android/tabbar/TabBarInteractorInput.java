@@ -7,6 +7,7 @@ package com.life360.android.tabbar;
 public interface TabBarInteractorInput {
 
     void onTabBarInitialized();
+    void onTabBarDestroyed();
     void onTabSelected(int tabType);
 
 }

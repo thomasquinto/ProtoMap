@@ -40,17 +40,17 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
         c.startActivity(new Intent(c, TabBarActivity.class));
     }
 
-    @BindView(R.id.tabBar)
+    @BindView(R.id.tab_bar)
     BottomBar tabBar;
 
-    @BindView(R.id.tab_people)
-    View tabPeople;
-    @BindView(R.id.tab_places)
-    View tabPlaces;
-    @BindView(R.id.tab_safety)
-    View tabSafety;
-    @BindView(R.id.tab_profile)
-    View tabProfile;
+    @BindView(R.id.tab_view_people)
+    View tabViewPeople;
+    @BindView(R.id.tab_view_places)
+    View tabViewPlaces;
+    @BindView(R.id.tab_view_safety)
+    View tabViewSafety;
+    @BindView(R.id.tab_view_profile)
+    View tabViewProfile;
 
     private TabBarPresenterInput presenter;
 
@@ -61,51 +61,68 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
         setContentView(R.layout.activity_tab_bar);
         ButterKnife.bind(this);
 
+        presenter = new TabBarBuilder((App) getApplicationContext()).getPresenter();
+        presenter.attachView(this);
+
+        setupTabBarListeners();
+
+        // TODO: Move this into a Map Riblet
+        setupMapFragment();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.detachView(this);
+    }
+
+    private void setupTabBarListeners() {
         tabBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 switchTab(tabId);
+                presenter.tabSelected(getTabTypeForId(tabId));
             }
-        });
+        }, true); // true means fire tab-selected event for very first tab upon initialization
 
         // If you want to listen for reselection events, here's how you do it:
         tabBar.setOnTabReselectListener(new OnTabReselectListener() {
             @Override
             public void onTabReSelected(@IdRes int tabId) {
                 switchTab(tabId);
+                presenter.tabSelected(getTabTypeForId(tabId));
             }
         });
+    }
 
-        // TODO: Move this into a Map Riblet
-        setupMapFragment();
-
-        presenter = new TabBarBuilder((App) getApplicationContext()).getPresenter();
-        presenter.attachView(this);
+    private void clearTabBarListeners() {
+        tabBar.setOnTabSelectListener(null, false);
+        tabBar.setOnTabReselectListener(null);
     }
 
     private void switchTab(int tabId) {
-        tabPeople.setVisibility(View.GONE);
-        tabPlaces.setVisibility(View.GONE);
-        tabSafety.setVisibility(View.GONE);
-        tabProfile.setVisibility(View.GONE);
+        if (tabId != R.id.tab_people) tabViewPeople.setVisibility(View.GONE);
+        if (tabId != R.id.tab_places) tabViewPlaces.setVisibility(View.GONE);
+        if (tabId != R.id.tab_safety) tabViewSafety.setVisibility(View.GONE);
+        if (tabId != R.id.tab_profile) tabViewProfile.setVisibility(View.GONE);
 
         int statusBarColor = 0;
 
         switch (tabId) {
             case R.id.tab_people:
-                tabPeople.setVisibility(View.VISIBLE);
+                tabViewPeople.setVisibility(View.VISIBLE);
                 statusBarColor = R.color.grape_500;
                 break;
             case R.id.tab_places:
-                tabPlaces.setVisibility(View.VISIBLE);
+                tabViewPlaces.setVisibility(View.VISIBLE);
                 statusBarColor = R.color.pink_500;
                 break;
             case R.id.tab_safety:
-                tabSafety.setVisibility(View.VISIBLE);
+                tabViewSafety.setVisibility(View.VISIBLE);
                 statusBarColor = R.color.orange_500;
                 break;
             case R.id.tab_profile:
-                tabProfile.setVisibility(View.VISIBLE);
+                tabViewProfile.setVisibility(View.VISIBLE);
                 statusBarColor = R.color.blue_500;
                 break;
         }
@@ -135,22 +152,55 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
                 googleMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
                     @Override
                     public void onCameraMoveStarted(int i) {
-                        animateOffset(tabBar, tabBar.getHeight());
+                        animateTabBarHeight(tabBar, tabBar.getHeight());
                     }
                 });
 
                 googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
                     @Override
                     public void onCameraIdle() {
-                        animateOffset(tabBar, 0);
+                        animateTabBarHeight(tabBar, 0);
                     }
                 });
             }
         });
     }
 
+    private int getTabTypeForId(int tabId) {
+        switch (tabId) {
+            case R.id.tab_people:
+                return TAB_PEOPLE;
+            case R.id.tab_places:
+                return TAB_PLACES;
+            case R.id.tab_safety:
+                return TAB_SAFETY;
+            case R.id.tab_profile:
+                return TAB_PROFILE;
+            default:
+                System.err.println("Unknown Tab ID value: " + tabId);
+                return -1;
+        }
+    }
+
+    private int getTabIdForType(int tabType) {
+        switch (tabType) {
+            case TAB_PEOPLE:
+                return R.id.tab_people;
+            case TAB_PLACES:
+                return R.id.tab_places;
+            case TAB_SAFETY:
+                return R.id.tab_safety;
+            case TAB_PROFILE:
+                return R.id.tab_profile;
+            default:
+                System.err.println("Unknown Tab Type value: " + tabType);
+                return -1;
+        }
+    }
+
     private static final int PORTRAIT = 1;
     private static final int LANDSCAPE = 2;
+
     private int getOrientation() {
         WindowManager windowService = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 
@@ -169,20 +219,20 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
     }
 
     private static final Interpolator INTERPOLATOR = new LinearOutSlowInInterpolator();
-    private ViewPropertyAnimatorCompat mTranslationAnimator;
+    private ViewPropertyAnimatorCompat translationAnimator;
 
-    private void animateOffset(final View child, final int offset) {
+    private void animateTabBarHeight(final View child, final int offset) {
         ensureOrCancelAnimator(child);
-        mTranslationAnimator.translationY(offset).start();
+        translationAnimator.translationY(offset).start();
     }
 
     private void ensureOrCancelAnimator(View child) {
-        if (mTranslationAnimator == null) {
-            mTranslationAnimator = ViewCompat.animate(child);
-            mTranslationAnimator.setDuration(300);
-            mTranslationAnimator.setInterpolator(INTERPOLATOR);
+        if (translationAnimator == null) {
+            translationAnimator = ViewCompat.animate(child);
+            translationAnimator.setDuration(300);
+            translationAnimator.setInterpolator(INTERPOLATOR);
         } else {
-            mTranslationAnimator.cancel();
+            translationAnimator.cancel();
         }
     }
 
@@ -190,49 +240,27 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
 
     @Override
     public void selectTab(int tabType) {
+        // clear listeners to avoid tab selected infinite loop
+        clearTabBarListeners();
 
-        switch(tabType) {
-            case TAB_PEOPLE:
-                switchTab(R.id.tab_people);
-                break;
-            case TAB_PLACES:
-                switchTab(R.id.tab_places);
-                break;
-            case TAB_SAFETY:
-                switchTab(R.id.tab_safety);
-                break;
-            case TAB_PROFILE:
-                switchTab(R.id.tab_profile);
-                break;
-            default:
-                System.err.println("Unknown Tab Type value: " + tabType);
-        }
+        int tabId = getTabIdForType(tabType);
+        tabBar.selectTabWithId(tabId);
+        switchTab(tabId); // call this manually here since listeners have been cleared
+
+        setupTabBarListeners();
     }
 
     @Override
     public void setBadgeCount(int tabType, int badgeCount) {
 
-        BottomBarTab tab = null;
-
-        switch(tabType) {
-            case TAB_PEOPLE:
-                tab = tabBar.getTabWithId(R.id.tab_people);
-                break;
-            case TAB_PLACES:
-                tab = tabBar.getTabWithId(R.id.tab_places);
-                break;
-            case TAB_SAFETY:
-                tab = tabBar.getTabWithId(R.id.tab_safety);
-                break;
-            case TAB_PROFILE:
-                tab = tabBar.getTabWithId(R.id.tab_profile);
-                break;
-            default:
-                System.err.println("Unknown Tab Type value: " + tabType);
-        }
+        BottomBarTab tab = tabBar.getTabWithId(getTabIdForType(tabType));
 
         if (tab != null) {
-            tab.setBadgeCount(badgeCount);
+            if (badgeCount <= 0) {
+                tab.removeBadge();
+            } else {
+                tab.setBadgeCount(badgeCount);
+            }
         }
     }
 

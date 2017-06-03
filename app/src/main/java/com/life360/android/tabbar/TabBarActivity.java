@@ -23,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.life360.android.dagger.App;
 import com.life360.android.protomap.R;
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -42,23 +43,20 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
     @BindView(R.id.tabBar)
     BottomBar tabBar;
 
-    @BindView(R.id.tab1)
-    View tab1;
-    @BindView(R.id.tab2)
-    View tab2;
-    @BindView(R.id.tab3)
-    View tab3;
-    @BindView(R.id.tab4)
-    View tab4;
+    @BindView(R.id.tab_people)
+    View tabPeople;
+    @BindView(R.id.tab_places)
+    View tabPlaces;
+    @BindView(R.id.tab_safety)
+    View tabSafety;
+    @BindView(R.id.tab_profile)
+    View tabProfile;
 
     private TabBarPresenterInput presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        presenter = new TabBarBuilder((App) getApplicationContext()).getPresenter();
-        presenter.attachView(this);
 
         setContentView(R.layout.activity_tab_bar);
         ButterKnife.bind(this);
@@ -78,35 +76,36 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
             }
         });
 
-        tabBar.setBadgeBackgroundColor(ContextCompat.getColor(this, R.color.orange_100));
-        tabBar.getTabAtPosition(3).setBadgeCount(3);
-
+        // TODO: Move this into a Map Riblet
         setupMapFragment();
+
+        presenter = new TabBarBuilder((App) getApplicationContext()).getPresenter();
+        presenter.attachView(this);
     }
 
     private void switchTab(int tabId) {
-        tab1.setVisibility(View.GONE);
-        tab2.setVisibility(View.GONE);
-        tab3.setVisibility(View.GONE);
-        tab4.setVisibility(View.GONE);
+        tabPeople.setVisibility(View.GONE);
+        tabPlaces.setVisibility(View.GONE);
+        tabSafety.setVisibility(View.GONE);
+        tabProfile.setVisibility(View.GONE);
 
         int statusBarColor = 0;
 
         switch (tabId) {
             case R.id.tab_people:
-                tab1.setVisibility(View.VISIBLE);
+                tabPeople.setVisibility(View.VISIBLE);
                 statusBarColor = R.color.grape_500;
                 break;
             case R.id.tab_places:
-                tab2.setVisibility(View.VISIBLE);
+                tabPlaces.setVisibility(View.VISIBLE);
                 statusBarColor = R.color.pink_500;
                 break;
             case R.id.tab_safety:
-                tab3.setVisibility(View.VISIBLE);
+                tabSafety.setVisibility(View.VISIBLE);
                 statusBarColor = R.color.orange_500;
                 break;
             case R.id.tab_profile:
-                tab4.setVisibility(View.VISIBLE);
+                tabProfile.setVisibility(View.VISIBLE);
                 statusBarColor = R.color.blue_500;
                 break;
         }
@@ -118,7 +117,7 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 window.setStatusBarColor(ContextCompat.getColor(this, statusBarColor));
             }
-            if (getOrientation() == LAND) {
+            if (getOrientation() == LANDSCAPE) {
                 if (Build.VERSION.SDK_INT >= 21) {
                     Window window = getWindow();
                     window.setNavigationBarColor(ContextCompat.getColor(this, statusBarColor));
@@ -150,21 +149,21 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
         });
     }
 
-    private static final int PORT = 1;
-    private static final int LAND = 2;
+    private static final int PORTRAIT = 1;
+    private static final int LANDSCAPE = 2;
     private int getOrientation() {
         WindowManager windowService = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 
         int rotation = windowService.getDefaultDisplay().getRotation();
 
         if (Surface.ROTATION_0 == rotation) {
-            rotation = PORT;
+            rotation = PORTRAIT;
         } else if(Surface.ROTATION_180 == rotation) {
-            rotation = PORT;
+            rotation = PORTRAIT;
         } else if(Surface.ROTATION_90 == rotation) {
-            rotation = LAND;
+            rotation = LANDSCAPE;
         } else if(Surface.ROTATION_270 == rotation) {
-            rotation = LAND;
+            rotation = LANDSCAPE;
         }
         return rotation;
     }
@@ -209,4 +208,32 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
                 System.err.println("Unknown Tab Type value: " + tabType);
         }
     }
+
+    @Override
+    public void setBadgeCount(int tabType, int badgeCount) {
+
+        BottomBarTab tab = null;
+
+        switch(tabType) {
+            case TAB_PEOPLE:
+                tab = tabBar.getTabWithId(R.id.tab_people);
+                break;
+            case TAB_PLACES:
+                tab = tabBar.getTabWithId(R.id.tab_places);
+                break;
+            case TAB_SAFETY:
+                tab = tabBar.getTabWithId(R.id.tab_safety);
+                break;
+            case TAB_PROFILE:
+                tab = tabBar.getTabWithId(R.id.tab_profile);
+                break;
+            default:
+                System.err.println("Unknown Tab Type value: " + tabType);
+        }
+
+        if (tab != null) {
+            tab.setBadgeCount(badgeCount);
+        }
+    }
+
 }

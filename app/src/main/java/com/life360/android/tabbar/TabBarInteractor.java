@@ -8,6 +8,8 @@ import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
 
+import static com.life360.android.tabbar.TabBarPresenterOutput.TAB_PROFILE;
+
 /**
  * Created by thomas on 6/2/17.
  */
@@ -29,7 +31,7 @@ public class TabBarInteractor extends Interactor implements TabBarInteractorInpu
     // TabBarInteractorInput Implementors
 
     public void onTabBarInitialized() {
-
+        presenter.setBadgeCount(TAB_PROFILE, 5);
     }
 
     public void onTabSelected(int tabType) {

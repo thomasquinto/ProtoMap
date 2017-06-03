@@ -14,5 +14,6 @@ public interface TabBarPresenterOutput extends PresenterOutput {
     int TAB_PROFILE = 3;
 
     void selectTab(int tabType);
+    void setBadgeCount(int tabType, int badgeCount);
 
 }

@@ -8,7 +8,6 @@ import com.life360.android.baseui.Presenter;
 
 public abstract class TabBarPresenterInput<V extends TabBarPresenterOutput> extends Presenter<V> {
 
-    abstract void onTabBarInitialized();
     abstract void tabSelected(int tabType);
 
 }

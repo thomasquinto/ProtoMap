@@ -1,4 +1,4 @@
-package com.life360.android.protomap.tabbar;
+package com.life360.android.tabbar;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +20,7 @@ import android.view.animation.Interpolator;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.life360.android.dagger.App;
 import com.life360.android.protomap.R;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
@@ -32,14 +33,14 @@ import butterknife.ButterKnife;
  * Created by thomas on 4/30/17.
  */
 
-public class TabBarActivity extends FragmentActivity {
+public class TabBarActivity extends FragmentActivity implements TabBarPresenterOutput {
 
     public static void start(Context c) {
         c.startActivity(new Intent(c, TabBarActivity.class));
     }
 
-    @BindView(R.id.bottomBar)
-    BottomBar bottomBar;
+    @BindView(R.id.tabBar)
+    BottomBar tabBar;
 
     @BindView(R.id.tab1)
     View tab1;
@@ -50,13 +51,19 @@ public class TabBarActivity extends FragmentActivity {
     @BindView(R.id.tab4)
     View tab4;
 
+    private TabBarPresenterInput presenter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        presenter = new TabBarBuilder((App) getApplicationContext()).getPresenter();
+        presenter.attachView(this);
+
         setContentView(R.layout.activity_tab_bar);
         ButterKnife.bind(this);
 
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+        tabBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 switchTab(tabId);
@@ -64,21 +71,21 @@ public class TabBarActivity extends FragmentActivity {
         });
 
         // If you want to listen for reselection events, here's how you do it:
-        bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+        tabBar.setOnTabReselectListener(new OnTabReselectListener() {
             @Override
             public void onTabReSelected(@IdRes int tabId) {
                 switchTab(tabId);
             }
         });
 
-        bottomBar.setBadgeBackgroundColor(ContextCompat.getColor(this, R.color.orange_100));
-        bottomBar.getTabAtPosition(3).setBadgeCount(3);
+        tabBar.setBadgeBackgroundColor(ContextCompat.getColor(this, R.color.orange_100));
+        tabBar.getTabAtPosition(3).setBadgeCount(3);
 
         setupMapFragment();
     }
 
     private void switchTab(int tabId) {
-        if (tab1 != null) tab1.setVisibility(View.GONE);
+        tab1.setVisibility(View.GONE);
         tab2.setVisibility(View.GONE);
         tab3.setVisibility(View.GONE);
         tab4.setVisibility(View.GONE);
@@ -129,14 +136,14 @@ public class TabBarActivity extends FragmentActivity {
                 googleMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
                     @Override
                     public void onCameraMoveStarted(int i) {
-                        animateOffset(bottomBar, bottomBar.getHeight());
+                        animateOffset(tabBar, tabBar.getHeight());
                     }
                 });
 
                 googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
                     @Override
                     public void onCameraIdle() {
-                        animateOffset(bottomBar, 0);
+                        animateOffset(tabBar, 0);
                     }
                 });
             }
@@ -180,4 +187,26 @@ public class TabBarActivity extends FragmentActivity {
         }
     }
 
+    // TabBarPresenterOutput Implementors
+
+    @Override
+    public void selectTab(int tabType) {
+
+        switch(tabType) {
+            case TAB_PEOPLE:
+                switchTab(R.id.tab_people);
+                break;
+            case TAB_PLACES:
+                switchTab(R.id.tab_places);
+                break;
+            case TAB_SAFETY:
+                switchTab(R.id.tab_safety);
+                break;
+            case TAB_PROFILE:
+                switchTab(R.id.tab_profile);
+                break;
+            default:
+                System.err.println("Unknown Tab Type value: " + tabType);
+        }
+    }
 }

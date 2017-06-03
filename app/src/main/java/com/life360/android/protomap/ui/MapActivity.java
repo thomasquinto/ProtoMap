@@ -36,7 +36,7 @@ import com.life360.android.protomap.model.Locatable;
 import com.life360.android.protomap.model.Member;
 import com.life360.android.protomap.model.Place;
 import com.life360.android.protomap.tab.BottomBarActivity;
-import com.life360.android.protomap.tabbar.TabBarActivity;
+import com.life360.android.tabbar.TabBarActivity;
 import com.life360.android.protomap.util.UiUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;

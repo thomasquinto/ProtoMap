@@ -1,7 +1,7 @@
 package com.life360.android.tabbar;
 
 import com.life360.android.baseui.Builder;
-import com.life360.android.dagger.App;
+import com.life360.android.dagger.DaggerApp;
 
 import javax.inject.Inject;
 
@@ -16,8 +16,8 @@ public class TabBarBuilder implements Builder {
     @Inject
     TabBarPresenterInput presenter;
 
-    public TabBarBuilder(App app) {
-        app.getTabBarComponent().inject(this);
+    public TabBarBuilder(DaggerApp app) {
+        app.getComponentManager().getTabBarComponent().inject(this);
     }
 
     public TabBarPresenterInput getPresenter() {

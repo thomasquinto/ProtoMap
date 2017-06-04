@@ -20,7 +20,7 @@ import android.view.animation.Interpolator;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.life360.android.dagger.App;
+import com.life360.android.dagger.DaggerApp;
 import com.life360.android.protomap.R;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
@@ -61,7 +61,7 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
         setContentView(R.layout.activity_tab_bar);
         ButterKnife.bind(this);
 
-        presenter = new TabBarBuilder((App) getApplicationContext()).getPresenter();
+        presenter = new TabBarBuilder((DaggerApp) getApplication()).getPresenter();
         presenter.attachView(this);
 
         setupTabBarListeners();

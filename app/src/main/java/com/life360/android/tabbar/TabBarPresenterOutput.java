@@ -1,6 +1,6 @@
 package com.life360.android.tabbar;
 
-import com.life360.android.baseui.PresenterOutput;
+import com.life360.android.scaffold.PresenterOutput;
 
 /**
  * Created by thomas on 6/2/17.

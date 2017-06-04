@@ -1,4 +1,4 @@
-package com.life360.android.baseui;
+package com.life360.android.scaffold;
 
 import java.util.ArrayList;
 import java.util.Collection;

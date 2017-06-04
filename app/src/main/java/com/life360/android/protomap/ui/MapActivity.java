@@ -36,7 +36,7 @@ import com.life360.android.protomap.model.Locatable;
 import com.life360.android.protomap.model.Member;
 import com.life360.android.protomap.model.Place;
 import com.life360.android.protomap.tab.BottomBarActivity;
-import com.life360.android.tabbar.TabBarActivity;
+import com.life360.android.protomap.tab.BottomNavigationActivity;
 import com.life360.android.protomap.util.UiUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -333,8 +333,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                         BottomBarActivity.start(MapActivity.this);
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
-                        //BottomNavigationActivity.start(MapActivity.this);
-                        TabBarActivity.start(MapActivity.this);
+                        BottomNavigationActivity.start(MapActivity.this);
+                        //TabBarActivity.start(MapActivity.this);
                         break;
                 }
             }

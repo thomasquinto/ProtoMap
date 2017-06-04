@@ -1,6 +1,6 @@
 package com.life360.android.tabbar;
 
-import com.life360.android.baseui.Builder;
+import com.life360.android.scaffold.Builder;
 import com.life360.android.dagger.DaggerApp;
 
 import javax.inject.Inject;

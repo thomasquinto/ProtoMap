@@ -1,4 +1,4 @@
-package com.life360.android.baseui;
+package com.life360.android.scaffold;
 
 import android.support.annotation.NonNull;
 

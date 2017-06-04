@@ -1,6 +1,6 @@
 package com.life360.android.tabbar;
 
-import com.life360.android.baseui.Interactor;
+import com.life360.android.scaffold.Interactor;
 import com.life360.android.dagger.JobScheduler;
 import com.life360.android.dagger.MainScheduler;
 

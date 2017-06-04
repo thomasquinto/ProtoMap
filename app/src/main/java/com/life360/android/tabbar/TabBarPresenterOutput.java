@@ -8,12 +8,14 @@ import com.life360.android.baseui.PresenterOutput;
 
 public interface TabBarPresenterOutput extends PresenterOutput {
 
-    int TAB_PEOPLE = 0;
-    int TAB_PLACES = 1;
-    int TAB_SAFETY = 2;
-    int TAB_PROFILE = 3;
+    enum TabType {
+        TAB_PEOPLE,
+        TAB_PLACES,
+        TAB_SAFETY,
+        TAB_PROFILE
+    }
 
-    void selectTab(int tabType);
-    void setBadgeCount(int tabType, int badgeCount);
+    void selectTab(TabType tabType);
+    void setBadgeCount(TabType tabType, int badgeCount);
 
 }

@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
 
-import static com.life360.android.tabbar.TabBarPresenterOutput.TAB_PROFILE;
+import static com.life360.android.tabbar.TabBarPresenterOutput.TabType.TAB_PROFILE;
 
 /**
  * Created by thomas on 6/2/17.
@@ -42,7 +42,7 @@ public class TabBarInteractor extends Interactor implements TabBarInteractorInpu
     }
 
     @Override
-    public void onTabSelected(int tabType) {
+    public void onTabSelected(TabBarPresenterOutput.TabType tabType) {
         System.out.println("Tab Selected for type: " + tabType);
     }
 }

@@ -30,15 +30,16 @@ import com.roughike.bottombar.OnTabSelectListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.life360.android.tabbar.TabBarPresenterOutput.TabType.TAB_PEOPLE;
+import static com.life360.android.tabbar.TabBarPresenterOutput.TabType.TAB_PLACES;
+import static com.life360.android.tabbar.TabBarPresenterOutput.TabType.TAB_PROFILE;
+import static com.life360.android.tabbar.TabBarPresenterOutput.TabType.TAB_SAFETY;
+
 /**
  * Created by thomas on 4/30/17.
  */
 
 public class TabBarActivity extends FragmentActivity implements TabBarPresenterOutput {
-
-    public static void start(Context c) {
-        c.startActivity(new Intent(c, TabBarActivity.class));
-    }
 
     @BindView(R.id.tab_bar)
     BottomBar tabBar;
@@ -53,6 +54,10 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
     View tabViewProfile;
 
     private TabBarPresenterInput presenter;
+
+    public static void start(Context context) {
+        context.startActivity(new Intent(context, TabBarActivity.class));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -166,7 +171,7 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
         });
     }
 
-    private int getTabTypeForId(int tabId) {
+    private TabType getTabTypeForId(int tabId) {
         switch (tabId) {
             case R.id.tab_people:
                 return TAB_PEOPLE;
@@ -177,12 +182,11 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
             case R.id.tab_profile:
                 return TAB_PROFILE;
             default:
-                System.err.println("Unknown Tab ID value: " + tabId);
-                return -1;
+                throw new IllegalArgumentException("Unknown Tab ID value: " + tabId);
         }
     }
 
-    private int getTabIdForType(int tabType) {
+    private int getTabIdForType(TabType tabType) {
         switch (tabType) {
             case TAB_PEOPLE:
                 return R.id.tab_people;
@@ -193,8 +197,7 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
             case TAB_PROFILE:
                 return R.id.tab_profile;
             default:
-                System.err.println("Unknown Tab Type value: " + tabType);
-                return -1;
+                throw new IllegalArgumentException("Unknown Tab Type value: " + tabType);
         }
     }
 
@@ -239,7 +242,7 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
     // TabBarPresenterOutput Implementors
 
     @Override
-    public void selectTab(int tabType) {
+    public void selectTab(TabType tabType) {
         // clear listeners to avoid tab selected infinite loop
         clearTabBarListeners();
 
@@ -251,7 +254,7 @@ public class TabBarActivity extends FragmentActivity implements TabBarPresenterO
     }
 
     @Override
-    public void setBadgeCount(int tabType, int badgeCount) {
+    public void setBadgeCount(TabType tabType, int badgeCount) {
 
         BottomBarTab tab = tabBar.getTabWithId(getTabIdForType(tabType));
 

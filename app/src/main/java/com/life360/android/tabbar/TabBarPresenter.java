@@ -22,7 +22,7 @@ public class TabBarPresenter<V extends TabBarPresenterOutput> extends TabBarPres
     // TabBarPresenterInput Implementors
 
     @Override
-    public void tabSelected(int tabType) {
+    public void tabSelected(TabBarPresenterOutput.TabType tabType) {
         interactor.onTabSelected(tabType);
     }
 
@@ -34,14 +34,14 @@ public class TabBarPresenter<V extends TabBarPresenterOutput> extends TabBarPres
     }
 
     @Override
-    public void selectTab(int tabType) {
+    public void selectTab(TabBarPresenterOutput.TabType tabType) {
         if (getView() != null) {
             getView().selectTab(tabType);
         }
     }
 
     @Override
-    public void setBadgeCount(int tabType, int badgeCount) {
+    public void setBadgeCount(TabBarPresenterOutput.TabType tabType, int badgeCount) {
         if (getView() != null) {
             getView().setBadgeCount(tabType, badgeCount);
         }

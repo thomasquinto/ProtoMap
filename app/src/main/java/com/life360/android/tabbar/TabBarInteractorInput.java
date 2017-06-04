@@ -8,6 +8,6 @@ public interface TabBarInteractorInput {
 
     void onTabBarInitialized();
     void onTabBarDestroyed();
-    void onTabSelected(int tabType);
+    void onTabSelected(TabBarPresenterOutput.TabType tabType);
 
 }

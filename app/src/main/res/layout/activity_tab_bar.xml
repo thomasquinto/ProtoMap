@@ -28,8 +28,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/pink_100">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/text_favorites"
@@ -37,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/lorem"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/text_schedules"
@@ -46,7 +45,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/lorem"
                 android:visibility="gone"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/text_music"
@@ -55,7 +54,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/lorem"
                 android:visibility="gone"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
 
         </RelativeLayout>
@@ -69,23 +68,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/orange_100">
+            android:layout_height="match_parent">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/lorem"
-                android:textSize="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/lorem"
-                android:visibility="gone"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -93,7 +83,15 @@
                 android:layout_centerInParent="true"
                 android:text="@string/lorem"
                 android:visibility="gone"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/lorem"
+                android:visibility="gone"
+                android:textSize="20sp" />
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
@@ -106,23 +104,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/blue_100">
+            android:layout_height="match_parent">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/lorem"
-                android:textSize="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/lorem"
-                android:visibility="gone"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -130,7 +119,15 @@
                 android:layout_centerInParent="true"
                 android:text="@string/lorem"
                 android:visibility="gone"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/lorem"
+                android:visibility="gone"
+                android:textSize="20sp" />
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
@@ -150,26 +147,3 @@
         app:bb_tabXmlResource="@xml/tab_bar" />
 
 </android.support.design.widget.CoordinatorLayout>
-
-<!--
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <FrameLayout
-        android:id="@+id/contentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottomBar" />
-
-    <com.roughike.bottombar.BottomBar
-        android:id="@+id/bottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        app:bb_behavior="underNavbar"
-        app:bb_tabXmlResource="@xml/tabs_bottom_bar" />
-
-</RelativeLayout>
--->

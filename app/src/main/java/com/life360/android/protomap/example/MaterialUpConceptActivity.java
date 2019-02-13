@@ -179,8 +179,10 @@ public class MaterialUpConceptActivity extends AppCompatActivity
 			viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 				@Override
 				public void onGlobalLayout() {
-					view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-					addMapMarkers();
+					if (map != null) {
+						view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+						addMapMarkers();
+					}
 				}
 			});
 		}
